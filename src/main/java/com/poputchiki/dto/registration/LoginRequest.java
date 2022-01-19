@@ -1,4 +1,4 @@
-package com.poputchiki.dto.enter;
+package com.poputchiki.dto.registration;
 
 public class LoginRequest {
     private String email;
