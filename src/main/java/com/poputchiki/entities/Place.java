@@ -3,12 +3,12 @@ package com.poputchiki.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name="places")
 @Data
-public class Places {
+public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private int id;
@@ -20,8 +20,8 @@ public class Places {
     private String photo;
 
     @Column(name="created_at", nullable = false)
-    private Date createdAt;
+    private OffsetDateTime createdAt;
 
     @Column(name="modified_at", nullable = false)
-    private Date modifiedAt;
+    private OffsetDateTime modifiedAt;
 }
