@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RefreshToken {
+public class UserToken {
     private String token;
+    private String refreshToken;
 }
