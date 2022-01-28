@@ -12,8 +12,8 @@ import java.util.List;
 public class JoinTheTripController {
 
     @GetMapping("/search")
-    public List<TripListResponse> tripSearch(@RequestParam("fromTime") OffsetDateTime fromTime,
-                                             @RequestParam("toTime") OffsetDateTime toTime,
+    public List<TripListResponse> tripSearch(@RequestParam("fromTime") String fromTime,
+                                             @RequestParam("toTime") String toTime,
                                              @RequestParam("fromPoint") String fromPoint,
                                              @RequestParam("toPoint") String toPoint){
         return Collections.emptyList();

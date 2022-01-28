@@ -3,6 +3,7 @@ package com.poputchiki.dto.join;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Getter
@@ -13,7 +14,7 @@ public class TripListResponse {
     private String surname;
     private String start;
     private String finish;
-    private Date startDate;
-    private Date finishDate;
+    private OffsetDateTime startDate;
+    private OffsetDateTime finishDate;
 
 }
