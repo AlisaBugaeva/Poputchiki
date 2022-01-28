@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  poputchiki-db:
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=a10bbb
+      - POSTGRES_DB=poputchiki
+      - PG_DATA=/var/poputchiki/postgresql/data
+    volumes:
+      - postgresql:/var/poputchiki/postgresql
+      - postgresql_data:/var/poputchiki/postgresql/data
+    restart: always
+    networks:
+      - poputchiki-net
+
+volumes:
+  postgresql:
+  postgresql_data:
+    driver: local
+
+networks:
+  poputchiki-net:
+    driver:
+       bridge
