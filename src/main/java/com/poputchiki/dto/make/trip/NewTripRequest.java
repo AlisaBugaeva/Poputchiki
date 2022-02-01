@@ -11,6 +11,6 @@ import java.util.Date;
 public class NewTripRequest {
     private String start;
     private String finish;
-    private OffsetDateTime startDate;
-    private OffsetDateTime finishDate;
+    private String startDate;
+    private String finishDate;
 }
