@@ -15,22 +15,22 @@ public class ActionWithTripController {
         this.actionWithTripService = actionWithTripService;
     }
 
-    @PostMapping(path="/{TRIP_ID}/join")
+    @PostMapping(path="/{TRIP_ID}")
     public void joinTheTrip(@PathVariable(value = "TRIP_ID") Integer id){
         actionWithTripService.joinTheTrip(id);
     }
 
-    @PostMapping("/new")
+    @PostMapping
     public void makeNewTrip(@RequestBody NewTripRequest trip){
         actionWithTripService.makeNewTrip(trip);
     }
 
-    @GetMapping("/{TRIP_ID}/view")
+    @GetMapping("/{TRIP_ID}")
     public TripListResponse viewTheTrip(@PathVariable(value = "TRIP_ID") Integer id){
         return actionWithTripService.viewTheTrip(id);
     }
 
-    @DeleteMapping("/{TRIP_ID}/delete")
+    @DeleteMapping("/{TRIP_ID}")
     public void deleteTheTrip(@PathVariable(value = "TRIP_ID") Integer id){
         actionWithTripService.deleteTheTrip(id);
     }

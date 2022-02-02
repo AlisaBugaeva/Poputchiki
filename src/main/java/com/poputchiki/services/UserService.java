@@ -10,7 +10,7 @@ public class UserService {
         return null;
     }
 
-    public void editInfo(){
-
+    public UserInfoResponse editInfo(){
+        return null;
     }
 }

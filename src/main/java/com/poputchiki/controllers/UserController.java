@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @PatchMapping("/edit")
-    public void editInfo(){
-
+    public UserInfoResponse editInfo(){
+        return userService.editInfo();
     }
 }
