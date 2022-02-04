@@ -2,7 +2,7 @@ package com.poputchiki.controllers;
 
 import com.poputchiki.dto.registration.LoginRequest;
 import com.poputchiki.dto.registration.RegistrationRequest;
-import com.poputchiki.dto.registration.UserToken;
+import com.poputchiki.dto.registration.UserTokenDto;
 import com.poputchiki.services.AuthService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,17 +17,17 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public UserToken requestToRegister(@RequestBody RegistrationRequest user){
+    public UserTokenDto requestToRegister(@RequestBody RegistrationRequest user){
         return authService.requestToRegister(user);
     }
 
     @PostMapping("/login")
-    public UserToken requestToLogin(@RequestBody LoginRequest user){
+    public UserTokenDto requestToLogin(@RequestBody LoginRequest user){
         return authService.requestToLogin(user);
     }
 
     @GetMapping("/token")
-    public UserToken token(@RequestParam("refreshToken") String refreshToken){
+    public UserTokenDto token(@RequestParam("refreshToken") String refreshToken){
         return authService.token(refreshToken);
     }
 

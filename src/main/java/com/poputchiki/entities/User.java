@@ -24,10 +24,10 @@ public class User {
 
     private String password;
 
-    @Column(name="created_at", nullable = false)
+    @Column(name="created_at")
     private OffsetDateTime createdAt;
 
-    @Column(name="modified_at", nullable = false)
+    @Column(name="modified_at")
     private OffsetDateTime  modifiedAt;
 
 }

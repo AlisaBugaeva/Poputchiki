@@ -1,4 +1,4 @@
-package com.poputchiki.dto.registration;
+package com.poputchiki.dto.error;
 
 import lombok.Getter;
 import lombok.Setter;
