@@ -25,7 +25,7 @@ public class UserToken {
     @Column(name="created_at", nullable = false)
     private OffsetDateTime createdAt;
 
-    @Column(name="modified_at", nullable = false)
-    private OffsetDateTime  modifiedAt;
+    @Column(name="expired_at", nullable = false)
+    private OffsetDateTime  expiredAt;
 
 }

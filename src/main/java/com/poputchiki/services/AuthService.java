@@ -11,6 +11,7 @@ import com.poputchiki.repositories.UserTokenRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Component
@@ -32,6 +33,8 @@ public class AuthService {
             newUser.setPhoneNumber(user.getPhoneNumber());
             newUser.setEmail(user.getEmail());
             newUser.setPassword(user.getPassword());
+            newUser.setCreatedAt(OffsetDateTime.now());
+            newUser.setModifiedAt(OffsetDateTime.now());
 
             userRepository.save(newUser);
 
@@ -42,6 +45,8 @@ public class AuthService {
             userToken.setUserId(newUser.getId());
             userToken.setAccessToken(token);
             userToken.setRefreshToken(refreshToken);
+            userToken.setCreatedAt(OffsetDateTime.now());
+            userToken.setExpiredAt(OffsetDateTime.now());
 
             userTokenRepository.save(userToken);
             return new UserTokenDto(token,refreshToken);
