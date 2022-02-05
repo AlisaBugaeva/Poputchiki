@@ -1,5 +1,6 @@
 package com.poputchiki.controllers;
 
+import com.poputchiki.constants.ApiConstants;
 import com.poputchiki.dto.registration.LoginRequest;
 import com.poputchiki.dto.registration.RegistrationRequest;
 import com.poputchiki.dto.registration.UserTokenDto;
@@ -7,7 +8,7 @@ import com.poputchiki.services.AuthService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(ApiConstants.API_AUTH_PATH)
 public class AuthController {
 
     private AuthService authService;
@@ -16,22 +17,22 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/registration")
+    @PostMapping(ApiConstants.API_AUTH_REGISTRATION_PATH)
     public UserTokenDto requestToRegister(@RequestBody RegistrationRequest user){
         return authService.requestToRegister(user);
     }
 
-    @PostMapping("/login")
+    @PostMapping(ApiConstants.API_AUTH_LOGIN_PATH)
     public UserTokenDto requestToLogin(@RequestBody LoginRequest user){
         return authService.requestToLogin(user);
     }
 
-    @GetMapping("/token")
+    @GetMapping(ApiConstants.API_AUTH_TOKEN_PATH)
     public UserTokenDto token(@RequestParam("refreshToken") String refreshToken){
         return authService.token(refreshToken);
     }
 
-    @PostMapping("/logout")
+    @PostMapping(ApiConstants.API_AUTH_LOGOUT_PATH)
     public void logout(){
         authService.logout();
     }

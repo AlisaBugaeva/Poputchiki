@@ -1,5 +1,6 @@
 package com.poputchiki.controllers;
 
+import com.poputchiki.constants.ApiConstants;
 import com.poputchiki.dto.home.MyTripListResponse;
 import com.poputchiki.dto.home.NewTripListResponse;
 import com.poputchiki.dto.join.TripListResponse;
@@ -13,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/trips")
+@RequestMapping(ApiConstants.API_TRIPS_PATH)
 public class SearchTripsController {
 
     private SearchTripsService searchTripsService;

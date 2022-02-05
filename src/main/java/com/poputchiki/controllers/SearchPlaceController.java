@@ -1,5 +1,6 @@
 package com.poputchiki.controllers;
 
+import com.poputchiki.constants.ApiConstants;
 import com.poputchiki.dto.places.PlaceResponse;
 import com.poputchiki.services.SearchPlaceService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/places")
+@RequestMapping(ApiConstants.API_PLACES_PATH)
 public class SearchPlaceController {
 
     private SearchPlaceService searchPlaceService;

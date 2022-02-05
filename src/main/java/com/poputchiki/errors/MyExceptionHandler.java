@@ -3,7 +3,9 @@ package com.poputchiki.errors;
 import com.poputchiki.dto.error.ErrorMessage;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@RestControllerAdvice
 public class MyExceptionHandler {
 
     @ExceptionHandler(PoputchikiAppException.class)

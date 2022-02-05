@@ -1,5 +1,6 @@
 package com.poputchiki.services;
 
+import com.poputchiki.constants.ErrorMessages;
 import com.poputchiki.dto.registration.LoginRequest;
 import com.poputchiki.dto.registration.RegistrationRequest;
 import com.poputchiki.dto.registration.UserTokenDto;
@@ -38,41 +39,22 @@ public class AuthService {
 
             userRepository.save(newUser);
 
-            String token = DigestUtils.sha256Hex(UUID.randomUUID().toString());
-            String refreshToken = DigestUtils.sha256Hex(UUID.randomUUID().toString());
-
-            UserToken userToken = new UserToken();
-            userToken.setUserId(newUser.getId());
-            userToken.setAccessToken(token);
-            userToken.setRefreshToken(refreshToken);
-            userToken.setCreatedAt(OffsetDateTime.now());
-            userToken.setExpiredAt(OffsetDateTime.now());
-
-            userTokenRepository.save(userToken);
-            return new UserTokenDto(token,refreshToken);
+            return generateToken(newUser.getId());
 
         }
-        else throw new PoputchikiAppException("User with this email is already exists");
+        else throw new PoputchikiAppException(ErrorMessages.USER_EXISTS);
     }
 
     public UserTokenDto requestToLogin(LoginRequest user) throws PoputchikiAppException{
         if (userRepository.findByEmail(user.getEmail())==null){
-            throw new PoputchikiAppException("User with this email is not exists");
+            throw new PoputchikiAppException(ErrorMessages.USER_NOT_EXISTS);
         }
         else if(!userRepository.findByEmail(user.getEmail()).getPassword().equals(user.getPassword())){
-            throw new PoputchikiAppException("Wrong password");
+            throw new PoputchikiAppException(ErrorMessages.WRONG_PASSWORD);
         }
         else{
             User newUser = userRepository.findByEmail(user.getEmail());
-
-            String token = DigestUtils.sha256Hex(UUID.randomUUID().toString());
-            String refreshToken = DigestUtils.sha256Hex(UUID.randomUUID().toString());
-            UserToken userToken = new UserToken();
-            userToken.setUserId(newUser.getId());
-            userToken.setAccessToken(token);
-            userToken.setRefreshToken(refreshToken);
-            userTokenRepository.save(userToken);
-            return new UserTokenDto(token,refreshToken);
+            return generateToken(newUser.getId());
         }
     }
 
@@ -81,6 +63,23 @@ public class AuthService {
     }
 
     public void logout(){
+
+    }
+
+
+    public UserTokenDto generateToken(int UserId){
+        String token = DigestUtils.sha256Hex(UUID.randomUUID().toString());
+        String refreshToken = DigestUtils.sha256Hex(UUID.randomUUID().toString());
+
+        UserToken userToken = new UserToken();
+        userToken.setUserId(UserId);
+        userToken.setAccessToken(token);
+        userToken.setRefreshToken(refreshToken);
+        userToken.setCreatedAt(OffsetDateTime.now());
+        userToken.setExpiredAt(OffsetDateTime.now());
+
+        userTokenRepository.save(userToken);
+        return new UserTokenDto(token,refreshToken);
 
     }
 }

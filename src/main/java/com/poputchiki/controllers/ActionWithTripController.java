@@ -1,12 +1,13 @@
 package com.poputchiki.controllers;
 
+import com.poputchiki.constants.ApiConstants;
 import com.poputchiki.dto.join.TripListResponse;
 import com.poputchiki.dto.make.trip.NewTripRequest;
 import com.poputchiki.services.ActionWithTripService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/trips")
+@RequestMapping(ApiConstants.API_TRIPS_PATH)
 public class ActionWithTripController {
 
     private ActionWithTripService actionWithTripService;
@@ -15,7 +16,7 @@ public class ActionWithTripController {
         this.actionWithTripService = actionWithTripService;
     }
 
-    @PostMapping(path="/{TRIP_ID}")
+    @PostMapping(path=ApiConstants.API_TRIP_ID_PATH)
     public void joinTheTrip(@PathVariable(value = "TRIP_ID") Integer id){
         actionWithTripService.joinTheTrip(id);
     }
@@ -25,12 +26,12 @@ public class ActionWithTripController {
         actionWithTripService.makeNewTrip(trip);
     }
 
-    @GetMapping("/{TRIP_ID}")
+    @GetMapping(ApiConstants.API_TRIP_ID_PATH)
     public TripListResponse viewTheTrip(@PathVariable(value = "TRIP_ID") Integer id){
         return actionWithTripService.viewTheTrip(id);
     }
 
-    @DeleteMapping("/{TRIP_ID}")
+    @DeleteMapping(ApiConstants.API_TRIP_ID_PATH)
     public void deleteTheTrip(@PathVariable(value = "TRIP_ID") Integer id){
         actionWithTripService.deleteTheTrip(id);
     }
