@@ -67,12 +67,8 @@ public class AuthService {
         }
     }
 
-    public UserTokenDto loginByToken(String token){
-        if(userTokenRepository.findByAccessToken(token)==null)
-            return null;
-        else{
-            return new UserTokenDto(userTokenRepository.findByAccessToken(token).getAccessToken(),userTokenRepository.findByAccessToken(token).getRefreshToken());
-        }
+    public UserToken loginByToken(String token){
+        return userTokenRepository.findByAccessToken(token);
     }
 
     public UserTokenDto token(String refreshToken){
