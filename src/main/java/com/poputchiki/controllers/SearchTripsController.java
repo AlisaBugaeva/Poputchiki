@@ -23,12 +23,12 @@ public class SearchTripsController {
         this.searchTripsService = searchTripsService;
     }
 
-    @GetMapping(params = "mine=true")
+    @GetMapping(params = ApiConstants.API_TRIPS_MINE_PATH)
     public List<MyTripListResponse> getUserTrips(){
         return searchTripsService.getUserTrips();
     }
 
-    @GetMapping(params="latest=true")
+    @GetMapping(params=ApiConstants.API_TRIPS_LAST_PATH)
     public List<NewTripListResponse> getNewTrips(@RequestParam("limit") Integer limit,
                                                  @RequestParam("pages") Integer pages ){
         return searchTripsService.getNewTrips(limit,pages);

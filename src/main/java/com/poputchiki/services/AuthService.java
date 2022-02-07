@@ -10,6 +10,8 @@ import com.poputchiki.errors.PoputchikiAppException;
 import com.poputchiki.repositories.UserRepository;
 import com.poputchiki.repositories.UserTokenRepository;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -17,6 +19,8 @@ import java.util.UUID;
 
 @Component
 public class AuthService {
+
+    private Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private UserRepository userRepository;
     private UserTokenRepository userTokenRepository;
@@ -42,19 +46,32 @@ public class AuthService {
             return generateToken(newUser.getId());
 
         }
-        else throw new PoputchikiAppException(ErrorMessages.USER_EXISTS);
+        else {
+            log.error("An ERROR Message: User with this email is already exists");
+            throw new PoputchikiAppException(ErrorMessages.USER_EXISTS);
+        }
     }
 
     public UserTokenDto requestToLogin(LoginRequest user) throws PoputchikiAppException{
         if (userRepository.findByEmail(user.getEmail())==null){
+            log.error("User with this email is not exists");
             throw new PoputchikiAppException(ErrorMessages.USER_NOT_EXISTS);
         }
         else if(!userRepository.findByEmail(user.getEmail()).getPassword().equals(user.getPassword())){
+            log.error("Wrong password");
             throw new PoputchikiAppException(ErrorMessages.WRONG_PASSWORD);
         }
         else{
             User newUser = userRepository.findByEmail(user.getEmail());
             return generateToken(newUser.getId());
+        }
+    }
+
+    public UserTokenDto loginByToken(String token){
+        if(userTokenRepository.findByAccessToken(token)==null)
+            return null;
+        else{
+            return new UserTokenDto(userTokenRepository.findByAccessToken(token).getAccessToken(),userTokenRepository.findByAccessToken(token).getRefreshToken());
         }
     }
 
