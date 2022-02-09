@@ -1,12 +1,10 @@
 package com.poputchiki.controllers;
 
 import com.poputchiki.constants.ApiConstants;
+import com.poputchiki.dto.user.EditUserRequest;
 import com.poputchiki.dto.user.UserInfoResponse;
 import com.poputchiki.services.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(ApiConstants.API_USER_PATH)
@@ -24,7 +22,7 @@ public class UserController {
     }
 
     @PatchMapping(ApiConstants.API_USER_EDIT_PATH)
-    public UserInfoResponse editInfo(){
-        return userService.editInfo();
+    public UserInfoResponse editInfo(@RequestBody EditUserRequest user){
+        return userService.editInfo(user);
     }
 }

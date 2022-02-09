@@ -1,5 +1,6 @@
 package com.poputchiki.services;
 
+import com.poputchiki.RequestContext;
 import com.poputchiki.constants.ErrorMessages;
 import com.poputchiki.dto.registration.LoginRequest;
 import com.poputchiki.dto.registration.RegistrationRequest;
@@ -24,10 +25,12 @@ public class AuthService {
 
     private UserRepository userRepository;
     private UserTokenRepository userTokenRepository;
+    private RequestContext requestContext;
 
-    public AuthService(UserRepository userRepository, UserTokenRepository userTokenRepository) {
+    public AuthService(UserRepository userRepository, UserTokenRepository userTokenRepository, RequestContext requestContext) {
         this.userRepository = userRepository;
         this.userTokenRepository = userTokenRepository;
+        this.requestContext = requestContext;
     }
 
     public UserTokenDto requestToRegister(RegistrationRequest user) throws PoputchikiAppException {
@@ -67,18 +70,20 @@ public class AuthService {
         }
     }
 
-    public UserToken loginByToken(String token){
-        return userTokenRepository.findByAccessToken(token);
-    }
-
     public UserTokenDto token(String refreshToken){
         return null;
     }
 
     public void logout(){
-
+        UserToken userToken = loginByToken(requestContext.getToken());
+        userTokenRepository.delete(userToken);
     }
 
+
+
+    public UserToken loginByToken(String token){
+        return userTokenRepository.findByAccessToken(token);
+    }
 
     public UserTokenDto generateToken(int UserId){
         String token = DigestUtils.sha256Hex(UUID.randomUUID().toString());
