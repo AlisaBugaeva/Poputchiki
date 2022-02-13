@@ -3,6 +3,7 @@ package com.poputchiki.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -25,9 +26,9 @@ public class User {
     private String password;
 
     @Column(name="created_at")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name="modified_at")
-    private OffsetDateTime  modifiedAt;
+    private LocalDateTime  modifiedAt;
 
 }

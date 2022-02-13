@@ -3,6 +3,8 @@ package com.poputchiki.dto.make.trip;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
 
@@ -11,6 +13,6 @@ import java.util.Date;
 public class NewTripRequest {
     private String start;
     private String finish;
-    private String startDate;
-    private String finishDate;
+    private LocalDate startDate;
+    private LocalDate finishDate;
 }

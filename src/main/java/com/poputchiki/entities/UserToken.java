@@ -3,6 +3,7 @@ package com.poputchiki.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -23,9 +24,9 @@ public class UserToken {
     private String refreshToken;
 
     @Column(name="created_at", nullable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name="expired_at", nullable = false)
-    private OffsetDateTime  expiredAt;
+    private LocalDateTime  expiredAt;
 
 }

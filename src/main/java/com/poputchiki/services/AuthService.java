@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -41,8 +42,8 @@ public class AuthService {
             newUser.setPhoneNumber(user.getPhoneNumber());
             newUser.setEmail(user.getEmail());
             newUser.setPassword(user.getPassword());
-            newUser.setCreatedAt(OffsetDateTime.now());
-            newUser.setModifiedAt(OffsetDateTime.now());
+            newUser.setCreatedAt(LocalDateTime.now());
+            newUser.setModifiedAt(LocalDateTime.now());
 
             userRepository.save(newUser);
 
@@ -71,7 +72,11 @@ public class AuthService {
     }
 
     public UserTokenDto token(String refreshToken){
-        return null;
+        UserToken userToken = userTokenRepository.findByRefreshToken(refreshToken);
+        log.info("user token " + userToken);
+        int userId = requestContext.getUserId();
+        userTokenRepository.delete(userToken);
+        return generateToken(userId);
     }
 
     public void logout(){
@@ -93,8 +98,8 @@ public class AuthService {
         userToken.setUserId(UserId);
         userToken.setAccessToken(token);
         userToken.setRefreshToken(refreshToken);
-        userToken.setCreatedAt(OffsetDateTime.now());
-        userToken.setExpiredAt(OffsetDateTime.now());
+        userToken.setCreatedAt(LocalDateTime.now());
+        userToken.setExpiredAt(LocalDateTime.now());
 
         userTokenRepository.save(userToken);
         return new UserTokenDto(token,refreshToken);

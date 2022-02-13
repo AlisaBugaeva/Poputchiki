@@ -3,6 +3,8 @@ package com.poputchiki.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -23,18 +25,18 @@ public class Travel {
     private String destinationPoint;
 
     @Column(name="departure_date", nullable = false)
-    private OffsetDateTime departureDate;
+    private LocalDate departureDate;
 
     @Column(name="destination_date", nullable = false)
-    private OffsetDateTime destinationDate;
+    private LocalDate destinationDate;
 
-    private String status;
+    private String status = "OPEN";
 
     @Column(name="created_at", nullable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name="modified_at", nullable = false)
-    private OffsetDateTime  modifiedAt;
+    private LocalDateTime  modifiedAt;
 
 
 }

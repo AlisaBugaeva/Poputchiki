@@ -3,6 +3,7 @@ package com.poputchiki.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -20,8 +21,8 @@ public class Place {
     private String photo;
 
     @Column(name="created_at", nullable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name="modified_at", nullable = false)
-    private OffsetDateTime modifiedAt;
+    private LocalDateTime modifiedAt;
 }
