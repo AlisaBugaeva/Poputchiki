@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -13,6 +14,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private int id;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Travel> travels;
 
     private String name;
 

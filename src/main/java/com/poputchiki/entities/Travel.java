@@ -15,8 +15,12 @@ public class Travel {
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private int id;
 
-    @Column(name="user_id", nullable = false)
-    private int userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    /*@Column(name="user_id", nullable = false)
+    private int userId;*/
 
     @Column(name="departure_point", nullable = false)
     private String departurePoint;

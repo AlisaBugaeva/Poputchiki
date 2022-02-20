@@ -6,6 +6,7 @@ import com.poputchiki.dto.join.TripListResponse;
 import com.poputchiki.dto.make.trip.NewTripRequest;
 import com.poputchiki.entities.Poputchik;
 import com.poputchiki.entities.Travel;
+import com.poputchiki.entities.User;
 import com.poputchiki.errors.PoputchikiAppException;
 import com.poputchiki.repositories.PlaceRepository;
 import com.poputchiki.repositories.PoputchikRepository;
@@ -52,7 +53,7 @@ public class ActionWithTripService {
             && placeRepository.findByCity(trip.getStart())!=null) {
 
             Travel travel = new Travel();
-            travel.setUserId(requestContext.getUserId());
+            travel.setUser(requestContext.getUserId());
             travel.setDeparturePoint(trip.getStart());
             travel.setDestinationPoint(trip.getFinish());
             travel.setDepartureDate(trip.getStartDate());
@@ -73,10 +74,7 @@ public class ActionWithTripService {
                 ()-> new PoputchikiAppException(ErrorMessages.TRIP_NOT_EXISTS)
         );
 
-        TripListResponse tripListResponse = new TripListResponse(userRepository.findById(travel.getUserId()).orElseThrow(
-                        ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)).getName(),
-                userRepository.findById(travel.getUserId()).orElseThrow(
-                        ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)).getSurname(),
+        TripListResponse tripListResponse = new TripListResponse(travel.getUser().getName(),travel.getUser().getSurname(),
                 travel.getDeparturePoint(),travel.getDestinationPoint(),travel.getDepartureDate(),travel.getDestinationDate());
         return tripListResponse;
     }

@@ -56,10 +56,7 @@ public class SearchTripsService {
         List<NewTripListResponse> newTripListResponses = new ArrayList<>();
 
         for (Travel travel: travels) {
-                newTripListResponses.add(new NewTripListResponse(userRepository.findById(travel.getUserId()).orElseThrow(
-                        ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)).getName(),
-                        userRepository.findById(travel.getUserId()).orElseThrow(
-                        ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)).getSurname(),
+                newTripListResponses.add(new NewTripListResponse(travel.getUser().getName(),travel.getUser().getSurname(),
                         travel.getDeparturePoint(),travel.getDestinationPoint(),travel.getDepartureDate(),travel.getDestinationDate()));
         }
         return newTripListResponses;
@@ -74,10 +71,7 @@ public class SearchTripsService {
 
         List<TripListResponse> tripListResponses = new ArrayList<>();
         for (Travel travel: travels) {
-                tripListResponses.add(new TripListResponse(userRepository.findById(travel.getUserId()).orElseThrow(
-                        ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)).getName(),
-                        userRepository.findById(travel.getUserId()).orElseThrow(
-                                ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)).getSurname(),
+                tripListResponses.add(new TripListResponse(travel.getUser().getName(),travel.getUser().getSurname(),
                         travel.getDeparturePoint(),travel.getDestinationPoint(),travel.getDepartureDate(),travel.getDestinationDate()));
         }
 
