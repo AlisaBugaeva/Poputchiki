@@ -4,14 +4,14 @@ import com.poputchiki.constants.ApiConstants;
 import com.poputchiki.dto.home.MyTripListResponse;
 import com.poputchiki.dto.home.NewTripListResponse;
 import com.poputchiki.dto.join.TripListResponse;
+import com.poputchiki.dto.requestParam.LimitCriteria;
+import com.poputchiki.dto.requestParam.SearchingCriteria;
 import com.poputchiki.services.SearchTripsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,18 +30,12 @@ public class SearchTripsController {
     }
 
     @GetMapping(ApiConstants.API_TRIPS_LAST_PATH)
-    public List<NewTripListResponse> getNewTrips(@RequestParam("limit") Integer limit,
-                                                 @RequestParam("pages") Integer pages ){
-        return searchTripsService.getNewTrips(limit,pages);
+    public List<NewTripListResponse> getNewTrips(LimitCriteria limitCriteria ){
+        return searchTripsService.getNewTrips(limitCriteria);
     }
 
     @GetMapping(ApiConstants.API_TRIPS_SEARCH_PATH)
-    public List<TripListResponse> tripSearch(@RequestParam("fromTime") String fromTime,
-                                             @RequestParam("toTime") String toTime,
-                                             @RequestParam("fromPoint") String fromPoint,
-                                             @RequestParam("toPoint") String toPoint,
-                                             @RequestParam("limit") Integer limit,
-                                             @RequestParam("pages") Integer pages ){
-        return searchTripsService.tripSearch(fromTime,toTime,fromPoint,toPoint,limit,pages);
+    public List<TripListResponse> tripSearch(@Valid SearchingCriteria searchingCriteria, LimitCriteria limitCriteria ){
+        return searchTripsService.tripSearch(searchingCriteria,limitCriteria);
     }
 }

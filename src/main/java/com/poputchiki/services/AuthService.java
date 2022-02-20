@@ -2,6 +2,7 @@ package com.poputchiki.services;
 
 import com.poputchiki.RequestContext;
 import com.poputchiki.constants.ErrorMessages;
+import com.poputchiki.constants.PoputchikiProperties;
 import com.poputchiki.dto.registration.LoginRequest;
 import com.poputchiki.dto.registration.RegistrationRequest;
 import com.poputchiki.dto.registration.UserTokenDto;
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Component
@@ -27,11 +27,13 @@ public class AuthService {
     private UserRepository userRepository;
     private UserTokenRepository userTokenRepository;
     private RequestContext requestContext;
+    private PoputchikiProperties poputchikiProperties;
 
-    public AuthService(UserRepository userRepository, UserTokenRepository userTokenRepository, RequestContext requestContext) {
+    public AuthService(UserRepository userRepository, UserTokenRepository userTokenRepository, RequestContext requestContext, PoputchikiProperties poputchikiProperties) {
         this.userRepository = userRepository;
         this.userTokenRepository = userTokenRepository;
         this.requestContext = requestContext;
+        this.poputchikiProperties = poputchikiProperties;
     }
 
     public UserTokenDto requestToRegister(RegistrationRequest user) throws PoputchikiAppException {
@@ -57,16 +59,16 @@ public class AuthService {
     }
 
     public UserTokenDto requestToLogin(LoginRequest user) throws PoputchikiAppException{
-        if (userRepository.findByEmail(user.getEmail())==null){
+        User newUser = userRepository.findByEmail(user.getEmail());
+        if (newUser==null){
             log.error("User with this email is not exists");
             throw new PoputchikiAppException(ErrorMessages.USER_NOT_EXISTS);
         }
-        else if(!userRepository.findByEmail(user.getEmail()).getPassword().equals(user.getPassword())){
+        else if(!newUser.getPassword().equals(user.getPassword())){
             log.error("Wrong password");
             throw new PoputchikiAppException(ErrorMessages.WRONG_PASSWORD);
         }
         else{
-            User newUser = userRepository.findByEmail(user.getEmail());
             return generateToken(newUser.getId());
         }
     }
@@ -99,7 +101,10 @@ public class AuthService {
         userToken.setAccessToken(token);
         userToken.setRefreshToken(refreshToken);
         userToken.setCreatedAt(LocalDateTime.now());
-        userToken.setExpiredAt(LocalDateTime.now());
+        userToken.setExpiredAt(LocalDateTime.now().plusHours(poputchikiProperties.getExpire()));
+        log.info("expire: "+ poputchikiProperties.getExpire());
+
+
 
         userTokenRepository.save(userToken);
         return new UserTokenDto(token,refreshToken);

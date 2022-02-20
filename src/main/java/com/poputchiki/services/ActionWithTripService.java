@@ -1,22 +1,19 @@
 package com.poputchiki.services;
 
 import com.poputchiki.RequestContext;
-import com.poputchiki.dto.home.NewTripListResponse;
+import com.poputchiki.constants.ErrorMessages;
 import com.poputchiki.dto.join.TripListResponse;
 import com.poputchiki.dto.make.trip.NewTripRequest;
 import com.poputchiki.entities.Poputchik;
 import com.poputchiki.entities.Travel;
-import com.poputchiki.entities.User;
 import com.poputchiki.errors.PoputchikiAppException;
+import com.poputchiki.repositories.PlaceRepository;
 import com.poputchiki.repositories.PoputchikRepository;
 import com.poputchiki.repositories.TravelRepository;
 import com.poputchiki.repositories.UserRepository;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 @Component
@@ -25,16 +22,21 @@ public class ActionWithTripService {
     private PoputchikRepository poputchikRepository;
     private TravelRepository travelRepository;
     private UserRepository userRepository;
+    private PlaceRepository placeRepository;
     private RequestContext requestContext;
 
-    public ActionWithTripService(PoputchikRepository poputchikRepository, TravelRepository travelRepository, UserRepository userRepository, RequestContext requestContext) {
+    public ActionWithTripService(PoputchikRepository poputchikRepository, TravelRepository travelRepository, UserRepository userRepository, PlaceRepository placeRepository, RequestContext requestContext) {
         this.poputchikRepository = poputchikRepository;
         this.travelRepository = travelRepository;
         this.userRepository = userRepository;
+        this.placeRepository = placeRepository;
         this.requestContext = requestContext;
     }
 
     public void joinTheTrip(Integer id){
+        travelRepository.findById(id).orElseThrow(
+                ()-> new PoputchikiAppException(ErrorMessages.TRIP_NOT_EXISTS));
+
         Poputchik poputchik = new Poputchik();
         poputchik.setPoputchikId(requestContext.getUserId());
         poputchik.setTravelId(id);
@@ -46,35 +48,42 @@ public class ActionWithTripService {
     }
 
     public void makeNewTrip( NewTripRequest trip){
-        Travel travel = new Travel();
-        travel.setUserId(requestContext.getUserId());
-        travel.setDeparturePoint(trip.getStart());
-        travel.setDestinationPoint(trip.getFinish());
-        travel.setDepartureDate(trip.getStartDate());
-        travel.setDestinationDate(trip.getFinishDate());
-        travel.setCreatedAt(LocalDateTime.now());
-        travel.setModifiedAt(LocalDateTime.now());
+        if(placeRepository.findByCity(trip.getFinish())!=null
+            && placeRepository.findByCity(trip.getStart())!=null) {
 
-        travelRepository.save(travel);
+            Travel travel = new Travel();
+            travel.setUserId(requestContext.getUserId());
+            travel.setDeparturePoint(trip.getStart());
+            travel.setDestinationPoint(trip.getFinish());
+            travel.setDepartureDate(trip.getStartDate());
+            travel.setDestinationDate(trip.getFinishDate());
+            travel.setCreatedAt(LocalDateTime.now());
+            travel.setModifiedAt(LocalDateTime.now());
+
+            travelRepository.save(travel);
+        }
+        else {
+            throw new PoputchikiAppException(ErrorMessages.PLACE_NOT_EXISTS);
+        }
 
     }
 
     public TripListResponse viewTheTrip(Integer id){
         Travel travel = travelRepository.findById(id).orElseThrow(
-                ()-> new PoputchikiAppException("No trip with such ID")
+                ()-> new PoputchikiAppException(ErrorMessages.TRIP_NOT_EXISTS)
         );
 
         TripListResponse tripListResponse = new TripListResponse(userRepository.findById(travel.getUserId()).orElseThrow(
-                        ()-> new PoputchikiAppException("Something went wrong!")).getName(),
+                        ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)).getName(),
                 userRepository.findById(travel.getUserId()).orElseThrow(
-                        ()-> new PoputchikiAppException("Something went wrong!")).getSurname(),
+                        ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)).getSurname(),
                 travel.getDeparturePoint(),travel.getDestinationPoint(),travel.getDepartureDate(),travel.getDestinationDate());
         return tripListResponse;
     }
 
     public void deleteTheTrip(Integer id){
         Travel travel = travelRepository.findById(id).orElseThrow(
-                ()-> new PoputchikiAppException("No trip with such ID")
+                ()-> new PoputchikiAppException(ErrorMessages.TRIP_NOT_EXISTS)
         );
         travel.setStatus("CLOSED");
 

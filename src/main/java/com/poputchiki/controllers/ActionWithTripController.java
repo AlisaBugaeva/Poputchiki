@@ -6,6 +6,8 @@ import com.poputchiki.dto.make.trip.NewTripRequest;
 import com.poputchiki.services.ActionWithTripService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(ApiConstants.API_TRIPS_PATH)
 public class ActionWithTripController {
@@ -22,7 +24,7 @@ public class ActionWithTripController {
     }
 
     @PostMapping(ApiConstants.API_NEW_TRIP_PATH)
-    public void makeNewTrip(@RequestBody NewTripRequest trip){
+    public void makeNewTrip(@Valid  @RequestBody NewTripRequest trip){
         actionWithTripService.makeNewTrip(trip);
     }
 

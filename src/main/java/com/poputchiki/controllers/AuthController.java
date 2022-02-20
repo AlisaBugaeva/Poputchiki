@@ -7,6 +7,8 @@ import com.poputchiki.dto.registration.UserTokenDto;
 import com.poputchiki.services.AuthService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(ApiConstants.API_AUTH_PATH)
 public class AuthController {
@@ -18,12 +20,12 @@ public class AuthController {
     }
 
     @PostMapping(ApiConstants.API_AUTH_REGISTRATION_PATH)
-    public UserTokenDto requestToRegister(@RequestBody RegistrationRequest user){
+    public UserTokenDto requestToRegister(@Valid @RequestBody RegistrationRequest user){
         return authService.requestToRegister(user);
     }
 
     @PostMapping(ApiConstants.API_AUTH_LOGIN_PATH)
-    public UserTokenDto requestToLogin(@RequestBody LoginRequest user){
+    public UserTokenDto requestToLogin( @Valid @RequestBody LoginRequest user){
         return authService.requestToLogin(user);
     }
 

@@ -2,6 +2,7 @@ package com.poputchiki.controllers;
 
 import com.poputchiki.constants.ApiConstants;
 import com.poputchiki.dto.places.PlaceResponse;
+import com.poputchiki.dto.requestParam.LimitCriteria;
 import com.poputchiki.services.SearchPlaceService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +22,8 @@ public class SearchPlaceController {
     }
 
     @GetMapping(params="limit")
-    public List<PlaceResponse> getTopPlaces(@RequestParam("limit") Integer limit,
-                                            @RequestParam("pages") Integer pages){
-        return searchPlaceService.getTopPlaces(limit,pages);
+    public List<PlaceResponse> getTopPlaces(LimitCriteria limitCriteria){
+        return searchPlaceService.getTopPlaces(limitCriteria);
     }
 
     @GetMapping(params="name")

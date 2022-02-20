@@ -1,6 +1,7 @@
 package com.poputchiki.services;
 
 import com.poputchiki.RequestContext;
+import com.poputchiki.constants.ErrorMessages;
 import com.poputchiki.dto.user.EditUserRequest;
 import com.poputchiki.dto.user.UserInfoResponse;
 import com.poputchiki.entities.User;
@@ -21,7 +22,9 @@ public class UserService {
 
     public UserInfoResponse getInfo(){
         UserInfoResponse userInfoResponse= new UserInfoResponse();
-        User user = userRepository.getById(requestContext.getUserId());
+        User user = userRepository.findById(requestContext.getUserId()).orElseThrow(
+                ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)
+        );
         userInfoResponse.setName(user.getName());
         userInfoResponse.setSurname(user.getSurname());
         userInfoResponse.setPhoneNumber(user.getPhoneNumber());
@@ -33,7 +36,7 @@ public class UserService {
     public UserInfoResponse editInfo(EditUserRequest user){
         UserInfoResponse userInfoResponse= new UserInfoResponse();
         User editedUser = userRepository.findById(requestContext.getUserId()).orElseThrow(
-                ()-> new PoputchikiAppException("Something went wrong!")
+                ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)
         );
 
         editedUser.setName(user.getName());
