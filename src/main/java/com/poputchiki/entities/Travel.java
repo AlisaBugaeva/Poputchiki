@@ -1,5 +1,6 @@
 package com.poputchiki.entities;
 
+import com.poputchiki.constants.TravelStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,9 +20,6 @@ public class Travel {
     @JoinColumn(name = "user_id")
     private User user;
 
-    /*@Column(name="user_id", nullable = false)
-    private int userId;*/
-
     @Column(name="departure_point", nullable = false)
     private String departurePoint;
 
@@ -34,7 +32,7 @@ public class Travel {
     @Column(name="destination_date", nullable = false)
     private LocalDate destinationDate;
 
-    private String status = "OPEN";
+    private String status = TravelStatus.OPEN_STATUS;
 
     @Column(name="created_at", nullable = false)
     private LocalDateTime createdAt;

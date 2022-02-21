@@ -2,6 +2,7 @@ package com.poputchiki.services;
 
 import com.poputchiki.RequestContext;
 import com.poputchiki.constants.ErrorMessages;
+import com.poputchiki.constants.TravelStatus;
 import com.poputchiki.dto.join.TripListResponse;
 import com.poputchiki.dto.make.trip.NewTripRequest;
 import com.poputchiki.entities.Poputchik;
@@ -84,7 +85,7 @@ public class ActionWithTripService {
         Travel travel = travelRepository.findById(id).orElseThrow(
                 ()-> new PoputchikiAppException(ErrorMessages.TRIP_NOT_EXISTS)
         );
-        travel.setStatus("CLOSED");
+        travel.setStatus(TravelStatus.CLOSED_STATUS);
 
         travelRepository.save(travel);
 
