@@ -51,7 +51,7 @@ public class SearchTripsService {
 
     public List<NewTripListResponse> getNewTrips(LimitCriteria limitCriteria){
         Pageable page = PageRequest.of(limitCriteria.getPage(), limitCriteria.getLimit());
-        LocalDateTime date = LocalDateTime.now().minusDays(8);
+        LocalDateTime date = LocalDateTime.now().minusDays(50);
         List<Travel> travels =travelRepository.findByCreatedAtGreaterThan(date,page);
         List<NewTripListResponse> newTripListResponses = new ArrayList<>();
 
@@ -65,9 +65,8 @@ public class SearchTripsService {
     public List<TripListResponse> tripSearch(SearchingCriteria searchingCriteria, LimitCriteria limitCriteria){
         Pageable page = PageRequest.of(limitCriteria.getPage(), limitCriteria.getLimit());
         LocalDate startDate = LocalDate.parse(searchingCriteria.getFromTime(), DateTimeFormatter.ISO_LOCAL_DATE);
-        LocalDate finishDate = LocalDate.parse(searchingCriteria.getToTime(), DateTimeFormatter.ISO_LOCAL_DATE);
-        List<Travel> travels = travelRepository.findByDepartureDateAndDestinationDateAndDeparturePointAndDestinationPoint
-                (startDate, finishDate, searchingCriteria.getFromPoint(), searchingCriteria.getToPoint(), page);
+        List<Travel> travels = travelRepository.findByDepartureDateAndDeparturePointAndDestinationPoint
+                (startDate, searchingCriteria.getFromPoint(), searchingCriteria.getToPoint(), page);
 
         List<TripListResponse> tripListResponses = new ArrayList<>();
         for (Travel travel: travels) {

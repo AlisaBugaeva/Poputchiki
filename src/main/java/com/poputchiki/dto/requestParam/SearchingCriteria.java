@@ -14,9 +14,6 @@ public class SearchingCriteria {
     @NotNull(message = ValidationConstants.NOT_EMPTY)
     private String fromTime;
 
-    @NotNull(message = ValidationConstants.NOT_EMPTY)
-    private String toTime;
-
     @NotBlank(message = ValidationConstants.NOT_EMPTY)
     private String fromPoint;
 

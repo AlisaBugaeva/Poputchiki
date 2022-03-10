@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
@@ -34,5 +33,4 @@ public class User {
 
     @Column(name="modified_at")
     private LocalDateTime  modifiedAt;
-
 }
