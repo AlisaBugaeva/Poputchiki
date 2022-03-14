@@ -16,6 +16,19 @@ services:
     restart: always
     networks:
       - poputchiki-net
+  my-notes-service:
+    image: abugaeva/poputchiki-app:1.0
+    ports:
+      - 8081:8081
+    environment:
+      - POSTGRES_PATH=jdbc:postgresql://poputchiki-db:5432/poputchiki
+      - POSTGRES_PASSWORD=a10bbb
+      - POSTGRES_USERNAME=postgres
+    depends_on:
+      - poputchiki-db
+    restart: always
+    networks:
+      - poputchiki-net
 
 volumes:
   postgresql:
