@@ -54,6 +54,8 @@ public class ActionWithTripService {
             && placeRepository.findByCity(trip.getStart())!=null) {
 
             Travel travel = new Travel();
+
+
             travel.setUser(userRepository.findById(requestContext.getUserId()).orElseThrow(
                     ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)));
             travel.setDeparturePoint(trip.getStart());

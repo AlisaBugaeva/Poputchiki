@@ -2,6 +2,7 @@ package com.poputchiki.services;
 
 import com.poputchiki.RequestContext;
 import com.poputchiki.constants.ErrorMessages;
+import com.poputchiki.constants.TravelStatus;
 import com.poputchiki.dto.home.MyTripListResponse;
 import com.poputchiki.dto.home.NewTripListResponse;
 import com.poputchiki.dto.join.TripListResponse;
@@ -43,7 +44,9 @@ public class SearchTripsService {
         log.info("myTravels" + travels);
         List<MyTripListResponse> myTripListResponses = new ArrayList<>();
         for (Travel travel: travels) {
-            myTripListResponses.add(new MyTripListResponse(travel.getDeparturePoint(),travel.getDestinationPoint(),travel.getDepartureDate(),travel.getDestinationDate()));
+            if(travel.getStatus().equals(TravelStatus.OPEN_STATUS)) {
+                myTripListResponses.add(new MyTripListResponse(travel.getDeparturePoint(), travel.getDestinationPoint(), travel.getDepartureDate(), travel.getDestinationDate(), travel.getId()));
+            }
         }
         return myTripListResponses;
     }

@@ -2,6 +2,7 @@ package com.poputchiki.entities;
 
 import com.poputchiki.constants.TravelStatus;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public class Travel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private User user;
 
     @Column(name="departure_point", nullable = false)

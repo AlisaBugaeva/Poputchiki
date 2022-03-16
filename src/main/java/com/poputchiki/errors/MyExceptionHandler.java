@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class MyExceptionHandler {
 
     @ExceptionHandler(PoputchikiAppException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage handle(PoputchikiAppException ex){
         ErrorMessage errorMessage = new ErrorMessage();
         errorMessage.setErrorMessage(ex.getMessage());

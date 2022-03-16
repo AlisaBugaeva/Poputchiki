@@ -14,6 +14,7 @@ import com.poputchiki.repositories.UserTokenRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class AuthService {
         this.poputchikiProperties = poputchikiProperties;
     }
 
+
     public UserTokenDto requestToRegister(RegistrationRequest user) throws PoputchikiAppException {
         if (userRepository.findByEmail(user.getEmail())==null){
             User newUser = new User();
@@ -43,7 +45,7 @@ public class AuthService {
             newUser.setSurname(user.getSurname());
             newUser.setPhoneNumber(user.getPhoneNumber());
             newUser.setEmail(user.getEmail());
-            newUser.setPassword(user.getPassword());
+            newUser.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
             newUser.setCreatedAt(LocalDateTime.now());
             newUser.setModifiedAt(LocalDateTime.now());
 
@@ -64,7 +66,7 @@ public class AuthService {
             log.error("User with this email is not exists");
             throw new PoputchikiAppException(ErrorMessages.USER_NOT_EXISTS);
         }
-        else if(!newUser.getPassword().equals(user.getPassword())){
+        else if(!BCrypt.checkpw(user.getPassword(), newUser.getPassword())){
             log.error("Wrong password");
             throw new PoputchikiAppException(ErrorMessages.WRONG_PASSWORD);
         }
@@ -95,15 +97,24 @@ public class AuthService {
     public UserTokenDto generateToken(int UserId){
         String token = DigestUtils.sha256Hex(UUID.randomUUID().toString());
         String refreshToken = DigestUtils.sha256Hex(UUID.randomUUID().toString());
-
         UserToken userToken = new UserToken();
-        userToken.setUserId(UserId);
-        userToken.setAccessToken(token);
-        userToken.setRefreshToken(refreshToken);
-        userToken.setCreatedAt(LocalDateTime.now());
-        userToken.setExpiredAt(LocalDateTime.now().plusHours(poputchikiProperties.getExpire()));
-        log.info("expire: "+ poputchikiProperties.getExpire());
 
+        if(userTokenRepository.findByUserId(UserId).isEmpty()) {
+            userToken.setUserId(UserId);
+            userToken.setAccessToken(token);
+            userToken.setRefreshToken(refreshToken);
+            userToken.setCreatedAt(LocalDateTime.now());
+            userToken.setExpiredAt(LocalDateTime.now().plusHours(poputchikiProperties.getExpire()));
+            log.info("expire: " + poputchikiProperties.getExpire());
+        }
+        else{
+            userToken = userTokenRepository.findByUserId(UserId).get(0);
+            userToken.setUserId(UserId);
+            userToken.setAccessToken(token);
+            userToken.setRefreshToken(refreshToken);
+            userToken.setCreatedAt(LocalDateTime.now());
+            userToken.setExpiredAt(LocalDateTime.now().plusHours(poputchikiProperties.getExpire()));
+        }
 
 
         userTokenRepository.save(userToken);
