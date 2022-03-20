@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface TravelRepository extends JpaRepository<Travel,Integer> {
     List<Travel> findByUserId(int userId);
-    List<Travel> findByCreatedAtGreaterThan(LocalDateTime date, Pageable pageable);
+    List<Travel> findByCreatedAtGreaterThanAndStatusEquals(LocalDateTime date, String status,Pageable pageable);
     List<Travel> findByDepartureDateAndDeparturePointAndDestinationPoint
             (LocalDate fromTime, String fromPoint, String toPoint, Pageable pageable);
 }

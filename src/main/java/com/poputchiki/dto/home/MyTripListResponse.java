@@ -16,12 +16,14 @@ public class MyTripListResponse {
     private String finish;
     private LocalDate startDate;
     private LocalDate finishDate;
+    private int numRequests;
 
-    public MyTripListResponse(String start, String finish, LocalDate startDate, LocalDate finishDate, int id) {
+    public MyTripListResponse(String start, String finish, LocalDate startDate, LocalDate finishDate, int id, int numRequests) {
         this.start = start;
         this.finish = finish;
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.id = id;
+        this.numRequests = numRequests;
     }
 }

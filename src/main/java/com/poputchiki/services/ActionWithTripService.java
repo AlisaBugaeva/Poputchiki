@@ -39,13 +39,16 @@ public class ActionWithTripService {
         travelRepository.findById(id).orElseThrow(
                 ()-> new PoputchikiAppException(ErrorMessages.TRIP_NOT_EXISTS));
 
-        Poputchik poputchik = new Poputchik();
-        poputchik.setPoputchikId(requestContext.getUserId());
-        poputchik.setTravelId(id);
-        poputchik.setCreatedAt(LocalDateTime.now());
-        poputchik.setModifiedAt(LocalDateTime.now());
+        int poputchikId = requestContext.getUserId();
+        if(poputchikRepository.findByPoputchikIdAndAndTravelId(poputchikId,id).isEmpty()) {
+            Poputchik poputchik = new Poputchik();
+            poputchik.setPoputchikId(poputchikId);
+            poputchik.setTravelId(id);
+            poputchik.setCreatedAt(LocalDateTime.now());
+            poputchik.setModifiedAt(LocalDateTime.now());
 
-        poputchikRepository.save(poputchik);
+            poputchikRepository.save(poputchik);
+        }
 
     }
 

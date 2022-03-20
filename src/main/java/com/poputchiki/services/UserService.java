@@ -48,6 +48,8 @@ public class UserService {
         userInfoResponse.setSurname(editedUser.getSurname());
         userInfoResponse.setPhoneNumber(editedUser.getPhoneNumber());
         userInfoResponse.setEmail(editedUser.getEmail());
+        userInfoResponse.setId(editedUser.getId());
+        userInfoResponse.setPassword(editedUser.getPassword());
 
         return userInfoResponse;
     }
