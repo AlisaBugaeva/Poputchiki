@@ -26,7 +26,7 @@ public class SearchPlaceService {
 
     public List<PlaceResponse> getTopPlaces(LimitCriteria limitCriteria){
         Pageable page = PageRequest.of(limitCriteria.getPage(), limitCriteria.getLimit());
-        List<Place> places = placeRepository.findAll(page).getContent();
+        List<Place> places = placeRepository.topOfCities();
         List<PlaceResponse> placeResponses = new ArrayList<>();
         for (Place place: places) {
             placeResponses.add(new PlaceResponse(place.getCity(),place.getDescription(),place.getPhoto()));

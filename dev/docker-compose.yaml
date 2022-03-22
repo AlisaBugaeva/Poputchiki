@@ -16,7 +16,7 @@ services:
     restart: always
     networks:
       - poputchiki-net
-  my-notes-service:
+  poputchiki-service:
     image: abugaeva/poputchiki-app:1.0
     ports:
       - 8081:8081
@@ -27,6 +27,13 @@ services:
     depends_on:
       - poputchiki-db
     restart: always
+    networks:
+      - poputchiki-net
+
+  poputchiki-service-frontend:
+    image: abugaeva/poputchiki-app-front
+    ports:
+      - 80:80
     networks:
       - poputchiki-net
 
