@@ -1,7 +1,6 @@
 package com.poputchiki.controllers;
 
 import com.poputchiki.constants.ApiConstants;
-import com.poputchiki.dto.join.TripListResponse;
 import com.poputchiki.dto.poputchiki.AcceptedTravelRequestsResponse;
 import com.poputchiki.dto.poputchiki.MyTravelRequestsResponse;
 import com.poputchiki.dto.poputchiki.TravelRequestsResponse;
@@ -20,7 +19,7 @@ public class PoputchikiController {
         this.poputchikiService = poputchikiService;
     }
 
-    @GetMapping(ApiConstants.API_TRIP_ID_PATH+ ApiConstants.API_VIEW_TRIP_BY_ID_PATH)
+    @GetMapping(ApiConstants.API_TRIP_ID_PATH+ ApiConstants.API_VIEW_BY_ID_PATH)
     public List<TravelRequestsResponse> viewRequests(@PathVariable(value = "TRIP_ID") Integer id){
         return poputchikiService.viewRequests(id);
     }

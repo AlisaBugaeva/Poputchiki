@@ -68,4 +68,30 @@ create table places
     modified_at timestamp default CURRENT_TIMESTAMP not null
 );
 
+create table dialogs
+(
+    id            serial
+        primary key,
+    poputchiki_id integer                             not null
+        references poputchiki
+            on delete cascade,
+    created_at    timestamp default CURRENT_TIMESTAMP not null,
+    modified_at   timestamp default CURRENT_TIMESTAMP not null
+);
+
+create table messages
+(
+    id          serial
+        primary key,
+    dialog_id   integer                                          not null
+        references dialogs
+            on delete cascade,
+    message     text                                             not null,
+    status      varchar(150) default 'UNREAD'::character varying not null,
+    created_at  timestamp    default CURRENT_TIMESTAMP           not null,
+    modified_at timestamp    default CURRENT_TIMESTAMP           not null
+);
+
+
+
 

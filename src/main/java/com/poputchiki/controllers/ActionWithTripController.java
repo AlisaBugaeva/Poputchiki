@@ -28,7 +28,7 @@ public class ActionWithTripController {
         actionWithTripService.makeNewTrip(trip);
     }
 
-    @GetMapping(ApiConstants.API_TRIP_ID_PATH + ApiConstants.API_VIEW_TRIP_BY_ID_PATH)
+    @GetMapping(ApiConstants.API_TRIP_ID_PATH + ApiConstants.API_VIEW_BY_ID_PATH)
     public TripListResponse viewTheTrip(@PathVariable(value = "TRIP_ID") Integer id){
         return actionWithTripService.viewTheTrip(id);
     }
