@@ -2,21 +2,18 @@ package com.poputchiki.controllers;
 
 import com.poputchiki.constants.ApiConstants;
 import com.poputchiki.dto.messages.MessagesListResponse;
-import com.poputchiki.dto.registration.RegistrationRequest;
-import com.poputchiki.dto.registration.UserTokenDto;
-import com.poputchiki.services.MessagesServer;
+import com.poputchiki.services.MessagesService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping(ApiConstants.API_MESSAGES_PATH)
 public class MessagesController {
 
-    private MessagesServer messagesServer;
+    private MessagesService messagesServer;
 
-    public MessagesController(MessagesServer messagesServer) {
+    public MessagesController(MessagesService messagesServer) {
         this.messagesServer = messagesServer;
     }
 

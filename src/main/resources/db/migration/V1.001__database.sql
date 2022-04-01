@@ -89,7 +89,10 @@ create table messages
     message     text                                             not null,
     status      varchar(150) default 'UNREAD'::character varying not null,
     created_at  timestamp    default CURRENT_TIMESTAMP           not null,
-    modified_at timestamp    default CURRENT_TIMESTAMP           not null
+    modified_at timestamp    default CURRENT_TIMESTAMP           not null,
+    user_id     integer                                          not null
+        references users
+            on delete cascade
 );
 
 

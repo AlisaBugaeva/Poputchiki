@@ -11,5 +11,5 @@ public interface MessagesRepository extends JpaRepository<Message,Integer> {
 
     List<Message> findByDialogId(int dialogId);
 
-    int countByUserIdStatusEquals(int userId,String status);
+    int countByUserIdAndStatusEquals(int userId,String status);
 }
