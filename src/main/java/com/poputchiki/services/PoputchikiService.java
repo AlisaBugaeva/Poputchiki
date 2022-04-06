@@ -94,7 +94,7 @@ public class PoputchikiService {
             Travel travel = travelRepository.findById(poputchik.getTravelId()).orElseThrow(() -> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR));
             String email = user.getEmail();
             if(poputchik.getStatus().equals(PopitchikiStatus.ACCEPTED_STATUS)) {
-                acceptedTravelRequestsResponses.add(new AcceptedTravelRequestsResponse(user.getName(), user.getSurname(), email, travel.getDeparturePoint(), travel.getDestinationPoint(), travel.getDepartureDate(), travel.getDestinationDate()));
+                acceptedTravelRequestsResponses.add(new AcceptedTravelRequestsResponse(poputchik.getId(),user.getName(), user.getSurname(), email, travel.getDeparturePoint(), travel.getDestinationPoint(), travel.getDepartureDate(), travel.getDestinationDate()));
             }
         }
         return acceptedTravelRequestsResponses;

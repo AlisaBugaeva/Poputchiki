@@ -25,6 +25,9 @@ public interface PoputchikRepository extends JpaRepository<Poputchik,Integer> {
     @Query(value = "select p.* from users u_p join poputchiki p on u_p.id = p.poputchik_id join travels t on t.id = p.travel_id where t.user_id = :myId", nativeQuery = true)
     List<Poputchik> userRequests(@Param("myId") int myId);
 
+    @Query(value = "select p.* from dialogs d join poputchiki p on p.id = d.poputchiki_id join travels t on t.id = p.travel_id where t.user_id = :myId or p.poputchik_id = :myId order by d.created_at desc", nativeQuery = true)
+    List<Poputchik> viewAllDialogs(@Param("myId") int myId);
+
 
 
 }

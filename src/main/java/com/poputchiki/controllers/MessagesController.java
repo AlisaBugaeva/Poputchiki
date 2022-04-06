@@ -1,6 +1,7 @@
 package com.poputchiki.controllers;
 
 import com.poputchiki.constants.ApiConstants;
+import com.poputchiki.dto.messages.DialogListResponse;
 import com.poputchiki.dto.messages.MessagesListResponse;
 import com.poputchiki.services.MessagesService;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,10 @@ public class MessagesController {
     @PostMapping(ApiConstants.API_DIALOG_ID_PATH + ApiConstants.API_READ_MESSAGES_PATH)
     public void readMessages(@PathVariable(value = "DIALOG_ID") Integer id){
         messagesServer.readMessages(id);
+    }
+
+    @GetMapping(ApiConstants.API_DIALOGS_PATH)
+    public List <DialogListResponse> viewDialogs(){
+        return messagesServer.viewDialogs();
     }
 }

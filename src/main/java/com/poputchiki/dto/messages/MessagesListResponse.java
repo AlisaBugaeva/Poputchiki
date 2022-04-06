@@ -10,10 +10,12 @@ import java.time.LocalDateTime;
 public class MessagesListResponse {
     private String text;
     private LocalDateTime date;
+    private String whose;
 
-    public MessagesListResponse(String text, LocalDateTime date) {
+    public MessagesListResponse(String text, LocalDateTime date, String whose) {
         this.text = text;
         this.date = date;
+        this.whose = whose;
     }
 }
 
