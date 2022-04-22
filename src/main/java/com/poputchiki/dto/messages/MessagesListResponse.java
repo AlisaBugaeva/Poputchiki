@@ -8,14 +8,16 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class MessagesListResponse {
+    private int id;
     private String text;
     private LocalDateTime date;
-    private String whose;
+    private boolean mine;
 
-    public MessagesListResponse(String text, LocalDateTime date, String whose) {
+    public MessagesListResponse(String text, LocalDateTime date, boolean mine,int id) {
         this.text = text;
         this.date = date;
-        this.whose = whose;
+        this.mine = mine;
+        this.id = id;
     }
 }
 

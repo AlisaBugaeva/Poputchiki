@@ -3,14 +3,16 @@ package com.poputchiki.services;
 import com.poputchiki.RequestContext;
 import com.poputchiki.constants.ErrorMessages;
 import com.poputchiki.constants.MessageStatus;
-import com.poputchiki.constants.WhoseConstants;
 import com.poputchiki.dto.messages.DialogListResponse;
+import com.poputchiki.dto.messages.MessageRequest;
+import com.poputchiki.dto.messages.MessageResponse;
 import com.poputchiki.dto.messages.MessagesListResponse;
 import com.poputchiki.entities.*;
 import com.poputchiki.errors.PoputchikiAppException;
 import com.poputchiki.repositories.*;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,14 +24,16 @@ public class MessagesService {
     private UserRepository userRepository;
     private TravelRepository travelRepository;
     private PoputchikRepository poputchikRepository;
+    private UserTokenRepository userTokenRepository;
 
-    public MessagesService(DialogRepository dialogRepository, MessagesRepository messagesRepository, RequestContext requestContext, UserRepository userRepository, TravelRepository travelRepository, PoputchikRepository poputchikRepository) {
+    public MessagesService(DialogRepository dialogRepository, MessagesRepository messagesRepository, RequestContext requestContext, UserRepository userRepository, TravelRepository travelRepository, PoputchikRepository poputchikRepository, UserTokenRepository userTokenRepository) {
         this.dialogRepository = dialogRepository;
         this.messagesRepository = messagesRepository;
         this.requestContext = requestContext;
         this.userRepository = userRepository;
         this.travelRepository = travelRepository;
         this.poputchikRepository = poputchikRepository;
+        this.userTokenRepository = userTokenRepository;
     }
 
     public List<MessagesListResponse> viewMessages(Integer id){
@@ -37,15 +41,12 @@ public class MessagesService {
         List<Message> messages = messagesRepository.findByDialogIdOrderByCreatedAt(dialogId);
 
         List<MessagesListResponse> messagesListResponses = new ArrayList<>();
-        String whose;
         for(Message message: messages){
+            boolean mine = false;
             if(message.getUserId() == requestContext.getUserId()){
-                whose = WhoseConstants.MY;
+                mine = true;
             }
-            else{
-                whose = WhoseConstants.NOT_MY;
-            }
-            messagesListResponses.add(new MessagesListResponse(message.getMessage(), message.getCreatedAt(), whose));
+            messagesListResponses.add(new MessagesListResponse(message.getMessage(), message.getCreatedAt(), mine, dialogId));
         }
         return messagesListResponses;
     }
@@ -87,5 +88,21 @@ public class MessagesService {
 
         return dialogListResponses;
 
+    }
+
+
+    public MessageResponse send(MessageRequest message, String token) throws Exception {
+        Message newMessage = new Message();
+
+        int dialogId = dialogRepository.findByPoputchikiId(message.getIdPoputchik()).getId();
+        newMessage.setMessage(message.getText());
+        newMessage.setUserId(userTokenRepository.findByAccessToken(token).getUserId());
+        newMessage.setDialogId(dialogId);
+        newMessage.setCreatedAt(LocalDateTime.now());
+        newMessage.setModifiedAt(LocalDateTime.now());
+
+        messagesRepository.save(newMessage);
+
+        return new MessageResponse(newMessage.getDialogId(),newMessage.getMessage(),newMessage.getCreatedAt());
     }
 }

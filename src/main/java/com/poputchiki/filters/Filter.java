@@ -38,6 +38,8 @@ public class Filter implements javax.servlet.Filter {
 
         log.info("path: "+ castServletRequest.getServletPath());
 
+
+
             if (ifSecuredPath(castServletRequest)) {
                 if (authService.loginByToken(castServletRequest.getHeader("token")) != null) {
                     requestContext.setToken(castServletRequest.getHeader("token"));
