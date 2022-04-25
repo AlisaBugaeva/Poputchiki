@@ -3,16 +3,13 @@ package com.poputchiki.controllers;
 import com.poputchiki.constants.ApiConstants;
 import com.poputchiki.dto.messages.DialogListResponse;
 import com.poputchiki.dto.messages.MessageRequest;
-import com.poputchiki.dto.messages.MessageResponse;
 import com.poputchiki.dto.messages.MessagesListResponse;
 import com.poputchiki.services.MessagesService;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -47,8 +44,8 @@ public class MessagesController {
 
 
     @MessageMapping("/chat")
-    @SendTo("/topic/messages")
-    public MessageResponse send(@Payload MessageRequest message, @Header String token) throws Exception {
-        return messagesServer.send(message,token);
+    //@SendTo("/topic/messages")
+    public void send(@Payload MessageRequest message, @Header String token) throws Exception {
+        messagesServer.send(message,token);
     }
 }

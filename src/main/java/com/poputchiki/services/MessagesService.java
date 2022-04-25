@@ -3,13 +3,11 @@ package com.poputchiki.services;
 import com.poputchiki.RequestContext;
 import com.poputchiki.constants.ErrorMessages;
 import com.poputchiki.constants.MessageStatus;
-import com.poputchiki.dto.messages.DialogListResponse;
-import com.poputchiki.dto.messages.MessageRequest;
-import com.poputchiki.dto.messages.MessageResponse;
-import com.poputchiki.dto.messages.MessagesListResponse;
+import com.poputchiki.dto.messages.*;
 import com.poputchiki.entities.*;
 import com.poputchiki.errors.PoputchikiAppException;
 import com.poputchiki.repositories.*;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -25,8 +23,9 @@ public class MessagesService {
     private TravelRepository travelRepository;
     private PoputchikRepository poputchikRepository;
     private UserTokenRepository userTokenRepository;
+    private SimpMessagingTemplate messagingTemplate;
 
-    public MessagesService(DialogRepository dialogRepository, MessagesRepository messagesRepository, RequestContext requestContext, UserRepository userRepository, TravelRepository travelRepository, PoputchikRepository poputchikRepository, UserTokenRepository userTokenRepository) {
+    public MessagesService(DialogRepository dialogRepository, MessagesRepository messagesRepository, RequestContext requestContext, UserRepository userRepository, TravelRepository travelRepository, PoputchikRepository poputchikRepository, UserTokenRepository userTokenRepository, SimpMessagingTemplate messagingTemplate) {
         this.dialogRepository = dialogRepository;
         this.messagesRepository = messagesRepository;
         this.requestContext = requestContext;
@@ -34,6 +33,7 @@ public class MessagesService {
         this.travelRepository = travelRepository;
         this.poputchikRepository = poputchikRepository;
         this.userTokenRepository = userTokenRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public List<MessagesListResponse> viewMessages(Integer id){
@@ -91,7 +91,7 @@ public class MessagesService {
     }
 
 
-    public MessageResponse send(MessageRequest message, String token) throws Exception {
+    public void send(MessageRequest message, String token) throws Exception {
         Message newMessage = new Message();
 
         int dialogId = dialogRepository.findByPoputchikiId(message.getIdPoputchik()).getId();
@@ -101,8 +101,11 @@ public class MessagesService {
         newMessage.setCreatedAt(LocalDateTime.now());
         newMessage.setModifiedAt(LocalDateTime.now());
 
-        messagesRepository.save(newMessage);
-
-        return new MessageResponse(newMessage.getDialogId(),newMessage.getMessage(),newMessage.getCreatedAt());
+        Message saved = messagesRepository.save(newMessage);
+        Poputchik poputchik = poputchikRepository.findById(message.getIdPoputchik()).orElseThrow(() -> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR));
+        User user = userRepository.findById(poputchik.getPoputchikId()).orElseThrow(() -> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR));
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(message.getIdPoputchik()),"/topic/messages",
+                new MessagesListResponse(newMessage.getMessage(), newMessage.getCreatedAt(), true, newMessage.getDialogId()));
     }
 }
