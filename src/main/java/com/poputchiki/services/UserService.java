@@ -25,6 +25,7 @@ public class UserService {
         User user = userRepository.findById(requestContext.getUserId()).orElseThrow(
                 ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)
         );
+        userInfoResponse.setId(user.getId());
         userInfoResponse.setName(user.getName());
         userInfoResponse.setSurname(user.getSurname());
         userInfoResponse.setPhoneNumber(user.getPhoneNumber());

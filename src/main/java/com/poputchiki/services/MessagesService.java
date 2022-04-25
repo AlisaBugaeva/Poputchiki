@@ -42,11 +42,7 @@ public class MessagesService {
 
         List<MessagesListResponse> messagesListResponses = new ArrayList<>();
         for(Message message: messages){
-            boolean mine = false;
-            if(message.getUserId() == requestContext.getUserId()){
-                mine = true;
-            }
-            messagesListResponses.add(new MessagesListResponse(message.getMessage(), message.getCreatedAt(), mine, dialogId));
+            messagesListResponses.add(new MessagesListResponse(message.getMessage(), message.getCreatedAt(), dialogId,message.getUserId()));
         }
         return messagesListResponses;
     }
@@ -101,11 +97,10 @@ public class MessagesService {
         newMessage.setCreatedAt(LocalDateTime.now());
         newMessage.setModifiedAt(LocalDateTime.now());
 
-        Message saved = messagesRepository.save(newMessage);
-        Poputchik poputchik = poputchikRepository.findById(message.getIdPoputchik()).orElseThrow(() -> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR));
-        User user = userRepository.findById(poputchik.getPoputchikId()).orElseThrow(() -> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR));
+        messagesRepository.save(newMessage);
+
         messagingTemplate.convertAndSendToUser(
                 String.valueOf(message.getIdPoputchik()),"/topic/messages",
-                new MessagesListResponse(newMessage.getMessage(), newMessage.getCreatedAt(), true, newMessage.getDialogId()));
+                new MessagesListResponse(newMessage.getMessage(), newMessage.getCreatedAt(), newMessage.getDialogId(),userTokenRepository.findByAccessToken(token).getUserId()));
     }
 }

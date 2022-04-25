@@ -18,5 +18,7 @@ public class MessageRequest {
     @NotBlank(message = ValidationConstants.NOT_EMPTY)
     private String text;
 
+    int userId;
+
 
 }
