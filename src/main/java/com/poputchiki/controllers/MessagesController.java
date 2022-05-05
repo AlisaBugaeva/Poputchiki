@@ -44,7 +44,6 @@ public class MessagesController {
 
 
     @MessageMapping("/chat")
-    //@SendTo("/topic/messages")
     public void send(@Payload MessageRequest message, @Header String token) throws Exception {
         messagesServer.send(message,token);
     }

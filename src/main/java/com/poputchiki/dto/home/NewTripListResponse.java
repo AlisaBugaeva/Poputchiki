@@ -12,6 +12,7 @@ import java.util.Date;
 @Setter
 public class NewTripListResponse {
     private int id;
+    private int userId;
     private String name;
     private String surname;
     private String start;
@@ -19,7 +20,7 @@ public class NewTripListResponse {
     private LocalDate startDate;
     private LocalDate finishDate;
 
-    public NewTripListResponse(String name, String surname, String start, String finish, LocalDate startDate, LocalDate finishDate, int id) {
+    public NewTripListResponse(String name, String surname, String start, String finish, LocalDate startDate, LocalDate finishDate, int id, int userId) {
         this.name = name;
         this.surname = surname;
         this.start = start;
@@ -27,5 +28,6 @@ public class NewTripListResponse {
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.id = id;
+        this.userId=userId;
     }
 }

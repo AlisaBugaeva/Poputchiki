@@ -8,4 +8,7 @@ public interface ErrorMessages {
     String UNKNOWN_ERROR = "Something went wrong!";
     String TRIP_NOT_EXISTS = "No trip with such ID";
     String PLACE_NOT_EXISTS = "No such place";
+    String NULL_FROM = "Please enter start point";
+    String NULL_TO = "Please enter finish point";
+    String NULL_DATE = "Please enter start date";
 }

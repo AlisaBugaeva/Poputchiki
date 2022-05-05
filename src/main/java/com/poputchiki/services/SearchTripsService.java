@@ -1,6 +1,7 @@
 package com.poputchiki.services;
 
 import com.poputchiki.RequestContext;
+import com.poputchiki.constants.ErrorMessages;
 import com.poputchiki.constants.PopitchikiStatus;
 import com.poputchiki.constants.TravelStatus;
 import com.poputchiki.dto.home.MyTripListResponse;
@@ -9,6 +10,7 @@ import com.poputchiki.dto.join.TripListResponse;
 import com.poputchiki.dto.requestParam.LimitCriteria;
 import com.poputchiki.dto.requestParam.SearchingCriteria;
 import com.poputchiki.entities.Travel;
+import com.poputchiki.errors.PoputchikiAppException;
 import com.poputchiki.repositories.PoputchikRepository;
 import com.poputchiki.repositories.TravelRepository;
 import com.poputchiki.repositories.UserRepository;
@@ -61,13 +63,24 @@ public class SearchTripsService {
         List<NewTripListResponse> newTripListResponses = new ArrayList<>();
 
         for (Travel travel: travels) {
+            if(travel.getUser().getId()!=requestContext.getUserId()) {
                 newTripListResponses.add(new NewTripListResponse(travel.getUser().getName(), travel.getUser().getSurname(),
-                        travel.getDeparturePoint(), travel.getDestinationPoint(), travel.getDepartureDate(), travel.getDestinationDate(), travel.getId()));
+                        travel.getDeparturePoint(), travel.getDestinationPoint(), travel.getDepartureDate(), travel.getDestinationDate(), travel.getId(), travel.getUser().getId()));
+            }
         }
         return newTripListResponses;
     }
 
     public List<TripListResponse> tripSearch(SearchingCriteria searchingCriteria, LimitCriteria limitCriteria){
+        if (searchingCriteria.getFromPoint().equals("")){
+            throw new PoputchikiAppException(ErrorMessages.NULL_FROM);
+        }
+        else if (searchingCriteria.getToPoint().equals("") ){
+            throw new PoputchikiAppException(ErrorMessages.NULL_TO);
+        }
+        else if ( searchingCriteria.getFromTime().equals("")){
+            throw new PoputchikiAppException(ErrorMessages.NULL_DATE);
+        }
         Pageable page = PageRequest.of(limitCriteria.getPage(), limitCriteria.getLimit());
         LocalDate startDate = LocalDate.parse(searchingCriteria.getFromTime(), DateTimeFormatter.ISO_LOCAL_DATE);
         List<Travel> travels = travelRepository.findByDepartureDateAndDeparturePointAndDestinationPoint
