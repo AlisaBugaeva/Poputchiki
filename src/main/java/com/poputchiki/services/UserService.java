@@ -40,8 +40,11 @@ public class UserService {
                 ()-> new PoputchikiAppException(ErrorMessages.UNKNOWN_ERROR)
         );
 
+        if(!user.getName().equals(""))
         editedUser.setName(user.getName());
+        if(!user.getSurname().equals(""))
         editedUser.setSurname(user.getSurname());
+        if(!user.getPhoneNumber().equals(""))
         editedUser.setPhoneNumber(user.getPhoneNumber());
         userRepository.save(editedUser);
 

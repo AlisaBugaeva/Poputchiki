@@ -6,15 +6,18 @@ import com.poputchiki.constants.PopitchikiStatus;
 import com.poputchiki.dto.poputchiki.AcceptedTravelRequestsResponse;
 import com.poputchiki.dto.poputchiki.MyTravelRequestsResponse;
 import com.poputchiki.dto.poputchiki.TravelRequestsResponse;
+import com.poputchiki.entities.Dialog;
 import com.poputchiki.entities.Poputchik;
 import com.poputchiki.entities.Travel;
 import com.poputchiki.entities.User;
 import com.poputchiki.errors.PoputchikiAppException;
+import com.poputchiki.repositories.DialogRepository;
 import com.poputchiki.repositories.PoputchikRepository;
 import com.poputchiki.repositories.TravelRepository;
 import com.poputchiki.repositories.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +28,14 @@ public class PoputchikiService {
     private UserRepository userRepository;
     private RequestContext requestContext;
     private TravelRepository travelRepository;
+    private DialogRepository dialogRepository;
 
-    public PoputchikiService(PoputchikRepository poputchikRepository, UserRepository userRepository, RequestContext requestContext, TravelRepository travelRepository) {
+    public PoputchikiService(PoputchikRepository poputchikRepository, UserRepository userRepository, RequestContext requestContext, TravelRepository travelRepository, DialogRepository dialogRepository) {
         this.poputchikRepository = poputchikRepository;
         this.userRepository = userRepository;
         this.requestContext = requestContext;
         this.travelRepository = travelRepository;
+        this.dialogRepository = dialogRepository;
     }
 
     public List<TravelRequestsResponse> viewRequests(Integer id){
@@ -52,7 +57,14 @@ public class PoputchikiService {
         for(Poputchik poputchik: poputchiki) {
                 poputchik.setStatus(PopitchikiStatus.ACCEPTED_STATUS);
             poputchikRepository.save(poputchik);
+
+            Dialog dialog = new Dialog();
+            dialog.setPoputchikiId(poputchik.getId());
+            dialog.setCreatedAt(LocalDateTime.now());
+            dialog.setModifiedAt(LocalDateTime.now());
+            dialogRepository.save(dialog);
         }
+
     }
 
     public void rejectRequest(Integer idPoputchik, Integer idTravel){

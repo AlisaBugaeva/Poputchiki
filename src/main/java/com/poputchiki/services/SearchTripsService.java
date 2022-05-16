@@ -88,8 +88,9 @@ public class SearchTripsService {
 
         List<TripListResponse> tripListResponses = new ArrayList<>();
         for (Travel travel: travels) {
+            if(travel.getStatus().equals(TravelStatus.OPEN_STATUS))
                 tripListResponses.add(new TripListResponse(travel.getUser().getName(),travel.getUser().getSurname(),
-                        travel.getDeparturePoint(),travel.getDestinationPoint(),travel.getDepartureDate(),travel.getDestinationDate()));
+                        travel.getDeparturePoint(),travel.getDestinationPoint(),travel.getDepartureDate(),travel.getDestinationDate(),travel.getId(), travel.getUser().getId()));
         }
 
         return tripListResponses;

@@ -28,7 +28,7 @@ public class MessagesController {
     }
 
     @GetMapping(ApiConstants.API_MESSAGES_PATH+ApiConstants.API_UNREAD_MESSAGES_PATH)
-    public int countUnreadMessages(){
+    public boolean countUnreadMessages(){
         return messagesServer.countUnreadMessages();
     }
 

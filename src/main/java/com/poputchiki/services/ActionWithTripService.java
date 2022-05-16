@@ -82,7 +82,7 @@ public class ActionWithTripService {
         );
 
         TripListResponse tripListResponse = new TripListResponse(travel.getUser().getName(),travel.getUser().getSurname(),
-                travel.getDeparturePoint(),travel.getDestinationPoint(),travel.getDepartureDate(),travel.getDestinationDate());
+                travel.getDeparturePoint(),travel.getDestinationPoint(),travel.getDepartureDate(),travel.getDestinationDate(),travel.getId(), travel.getUser().getId());
         return tripListResponse;
     }
 

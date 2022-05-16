@@ -47,8 +47,8 @@ public class MessagesService {
         return messagesListResponses;
     }
 
-    public int countUnreadMessages(){
-        return messagesRepository.countByUserIdNotAndStatus(requestContext.getUserId(), MessageStatus.UNREAD_STATUS);
+    public boolean countUnreadMessages(){
+        return messagesRepository.countByUserIdNotAndStatus(requestContext.getUserId(), MessageStatus.UNREAD_STATUS) != 0;
     }
 
     public void readMessages(Integer id){
@@ -77,9 +77,15 @@ public class MessagesService {
             } else {
                 user = travel.getUser();
             }
-            dialogListResponses.add(new DialogListResponse(poputchik.getId(),user.getName(), user.getSurname(),
-                    travel.getDeparturePoint(), travel.getDestinationPoint(), travel.getDepartureDate(), travel.getDestinationDate(),
-                    messagesRepository.lastMessage(dialog.getId()).getMessage()));
+            if (messagesRepository.lastMessage(dialog.getId()).getMessage()!= null) {
+                dialogListResponses.add(new DialogListResponse(poputchik.getId(), user.getName(), user.getSurname(),
+                        travel.getDeparturePoint(), travel.getDestinationPoint(), travel.getDepartureDate(), travel.getDestinationDate(),
+                        messagesRepository.lastMessage(dialog.getId()).getMessage()));
+            }
+            else
+                dialogListResponses.add(new DialogListResponse(poputchik.getId(), user.getName(), user.getSurname(),
+                        travel.getDeparturePoint(), travel.getDestinationPoint(), travel.getDepartureDate(), travel.getDestinationDate(),
+                        "-"));
         }
 
         return dialogListResponses;
